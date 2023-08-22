@@ -9,9 +9,8 @@ namespace KDataFinder.ConsoleApp
 {
     internal class Program
     {
-
         public static IConfigurationRoot Configuration;
-        public static IServiceProvider ServiceProvider;
+        public static ServiceProvider ServiceProvider;
         #region Initialization
         static Program()
         {
@@ -49,6 +48,7 @@ namespace KDataFinder.ConsoleApp
             services.Configure<TableObtainerOptions>(Configuration.GetSection(nameof(TableObtainerOptions)));
             services.AddSingleton<ITableDataObtainer, TableDataObtainer>();
             #endregion
+            services.AddTransient<KApplication>();
         }
         static void ConfigureLogging(ILoggingBuilder builder)
         {
@@ -59,41 +59,11 @@ namespace KDataFinder.ConsoleApp
         }
         static void Main(string[] args)
         {
-            var loginService = ServiceProvider.GetRequiredService<ILoginService>();
-            IOperationResult loginResult = loginService.Login();
-            if (!loginResult.IsSucceeded)
-                throw new InvalidDataException(loginResult.AdditionalData?.ToString());
-            var tableDataObtainer = ServiceProvider.GetRequiredService<ITableDataObtainer>();
-            tableDataObtainer.Obtain(x =>
-            {
-                Console.Write(x.rowNumber + "-" + x.Columns.Length + "- \t");
-                foreach (var item in x.Columns)
-                    Console.Write(item.ToString() + "- \t");
-            });
-            //var tableDataObtainer = ServiceProvider.GetRequiredService<ITableDataObtainer<string, string>>();
-            //var mainTask = tableDataObtainer.Obtain();
-            //var pageDataObtainer = ServiceProvider.GetRequiredService<IPageDataObtainer<string, string>>();
-            //TaskManager taskManager = new(10);
-            //tableDataObtainer.DataCaster = async (y) =>
-            //{
-            //    var x = y;
-            //    await taskManager.AddTask(pageDataObtainer.Obtain(""));
-            //    return null;
-            //};
-
-            //هعی حالم خیلی خرابه
-            // مسغرس که توی ریپوزیتوری گیت بنویسی نه ؟
-            //تا حدودی نشانه از خلا های شخصیتی یک فرد میتونه باشه
-            //ولی خلا ها به همین جا ختم نمیشن
-            //دنیا پر از جای خالیه
-            //و دردت زیاد تره وقتی با پر کننده همشم سر لج باشی.
-            //یسری کد شعر.
-
-            //ما در هر صورت بازتاب رفتارهای دیگرانیم مهم نیست عکسش یا خودش!
-
-            //goto table page
-            //fill select box 
-            //proccess table data(paging,tasks manage,saving,....)
+            var application = ServiceProvider.GetRequiredService<KApplication>();
+            application.Run();
+            ServiceProvider.Dispose();
+            if (Configuration is ConfigurationRoot disposableConfiguration)
+                disposableConfiguration.Dispose();
         }
     }
 }

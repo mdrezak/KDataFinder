@@ -26,7 +26,7 @@
     ],
     "HasHeader": true,
     "HasPagination": true,
-    "TableRowsContainer": "table#ContentPlaceHolder2_grdProduct>tbody",
+    "TableRowsSelector": "table#ContentPlaceHolder2_grdProduct>tbody>tr",
     //when in last page this selector does not found any element :
     "NextPageButton": "a#ContentPlaceHolder2_rptPager_lnkPage_12.page.dark:not(.aspNetDisabled)"
   }

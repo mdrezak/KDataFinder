@@ -60,7 +60,7 @@ public record TableObtainerOptions()
     public string[] TablePagesUrl { get; set; }
     public bool HasHeader { get; set; }
     public bool HasPagination { get; set; }
-    public string TableRowsContainer { get; set; }
+    public string TableRowsSelector { get; set; }
     /// <summary>
     /// en-GT : When this selector does not refer to any element, it means that the pagination is over
     /// fa-IR : زمانی که این انتخابگر به هیچ المانی ارجاع ندهد به این معنی است که صفحه بندی به پایان رسیده 
