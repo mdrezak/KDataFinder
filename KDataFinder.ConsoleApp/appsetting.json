@@ -8,14 +8,17 @@
     "DriverPath": "D:\\Downloads\\develop\\kit\\edgedriver_win64",
     "DriverName": "Edge"
   },
-  "target": "https://senf.ir",
   "LoginOptions": {
-    "LoginPath": "/",
-    "LoginButton": "[name='ctl00$Login1$btnEnter']",
+    "LoginPath": "https://senf.ir/",
+    "AfterLoginButton": "[name='ctl00$Login1$btnEnter']",
+    "BeforeLoginButton": "#loginc",
     "PasswordElementName": "ctl00$Login1$txtPassword",
     "UserNameElementName": "ctl00$Login1$txtUserName",
-    "Password": "123456",
-    "UserName": "admin"
+    //read from user secret
+    //"Password": "",
+    //"UserName": "",
+    "ErrorElement": "#Login1_LabelNotice",
+    "SuccessCookie": ""
   }
 
 }

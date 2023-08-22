@@ -1,11 +1,8 @@
 ﻿using KDataFinder.ConsoleApp.Abstraction;
 using KDataFinder.ConsoleApp.Implementation.Selenium;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using OpenQA.Selenium;
 
 namespace KDataFinder.ConsoleApp
 {
@@ -19,6 +16,7 @@ namespace KDataFinder.ConsoleApp
         {
             //setup & build configuration
             Configuration = new ConfigurationBuilder()
+                       .AddUserSecrets<Program>()
                        .AddEnvironmentVariables()
                        .AddJsonFile("appsetting.json", false)
                        .AddJsonFile($"appsetting.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", true)
@@ -57,7 +55,12 @@ namespace KDataFinder.ConsoleApp
         static void Main(string[] args)
         {
             var loginService = ServiceProvider.GetRequiredService<ILoginService>();
-            loginService.Login();
+            IOperationResult loginResult = loginService.Login();
+            if (!loginResult.IsSucceeded)
+                throw new InvalidDataException(loginResult.AdditionalData?.ToString());
+            //goto table page
+            //fill select box 
+            //proccess table data(paging,tasks,saving,tasking,....)
         }
     }
 }
