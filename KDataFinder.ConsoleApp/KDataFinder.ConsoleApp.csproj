@@ -10,4 +10,13 @@
 		<!-- <FrameworkReference Include="Microsoft.NET.Sdk.Web" /> -->
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />
 	</ItemGroup>
+	<ItemGroup>
+	  <PackageReference Include="Selenium.WebDriver" Version="4.11.0" />
+	</ItemGroup>
+	<ItemGroup>
+	  <None Update="appsetting.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+	<ProjectExtensions><VisualStudio><UserProperties appsetting_1json__JsonSchema="https://json.schemastore.org/appsettings.json" /></VisualStudio></ProjectExtensions>
 </Project>

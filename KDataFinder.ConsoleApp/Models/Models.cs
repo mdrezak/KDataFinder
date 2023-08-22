@@ -1,18 +1,29 @@
 ﻿#region OperationResult
+using Microsoft.Extensions.Options;
+
+public interface IOperationResult : IOperationResult<object?> { }
 public interface IOperationResult<TAdditionalData>
 {
     public bool IsSucceeded { get; }
+    public FailureType FailureType { get; }
 }
-public record OperationResult(bool IsSucceeded, object? AdditionalData) : IOperationResult<object?>
+
+public enum FailureType
 {
-    public OperationResult(bool isSucceeded) : this(isSucceeded,null)
-    {
-        
-    }
+    None,
+    Conflict,
+    NotFound,
+}
+
+public record OperationResult(bool IsSucceeded, object? AdditionalData, FailureType FailureType) : IOperationResult
+{
+    public static IOperationResult Succeeded(object? AdditionalData = null) => new OperationResult(true, AdditionalData,FailureType.None);
+    public static IOperationResult Conflict(object? AdditionalData = null) => new OperationResult(false, AdditionalData,FailureType.Conflict);
+    public static IOperationResult NotFound(object? AdditionalData = null) => new OperationResult(false, AdditionalData,FailureType.NotFound);
 }
 public record OperationResult<TAdditionalData> : OperationResult, IOperationResult<TAdditionalData>
 {
-    public OperationResult(bool isSucceeded, TAdditionalData additionalData) : base(isSucceeded, additionalData)
+    public OperationResult(bool isSucceeded, TAdditionalData additionalData, FailureType failureType) : base(isSucceeded, additionalData,failureType)
     {
         this.AdditionalData = additionalData;
     }
@@ -23,16 +34,15 @@ public record OperationResult<TAdditionalData> : OperationResult, IOperationResu
 
 
 #region Login
-public record LoginResult : OperationResult
+#nullable disable
+public record LoginOptions
 {
-    public LoginResult(bool IsSucceeded) : base(IsSucceeded, null)
-    {
-    }
+    public string LoginPath { get; set; }
+    public string UserName { get; set; }
+    public string Password { get; set; }
+    public string UserNameElementName { get; set; }
+    public string PasswordElementName { get; set; }
+    public string LoginButton { get; set; }
 }
-public record LogOutResult : OperationResult
-{
-    public LogOutResult(bool IsSucceeded) : base(IsSucceeded, null)
-    {
-    }
-}
+#nullable restore
 #endregion

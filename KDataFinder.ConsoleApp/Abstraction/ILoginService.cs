@@ -2,6 +2,6 @@
 
 internal interface ILoginService
 {
-    LoginResult Login();
-    LoginResult LogOut();
+    IOperationResult Login();
+    IOperationResult LogOut();
 }
