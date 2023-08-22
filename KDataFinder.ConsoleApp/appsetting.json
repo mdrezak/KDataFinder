@@ -19,6 +19,16 @@
     //"UserName": "",
     "ErrorElement": "#Login1_LabelNotice",
     "SuccessCookie": ""
+  },
+  "TableObtainerOptions": {
+    "TablePagesUrl": [
+      "https://senf.ir/ListCompany/75713/%d8%a2%d8%b1%d8%a7%db%8c%d8%b4%db%8c%20%d9%88%20%d8%a8%d9%87%d8%af%d8%a7%d8%b4%d8%aa%db%8c"
+    ],
+    "HasHeader": true,
+    "HasPagination": true,
+    "TableRowsContainer": "table#ContentPlaceHolder2_grdProduct>tbody",
+    //when in last page this selector does not found any element :
+    "NextPageButton": "a#ContentPlaceHolder2_rptPager_lnkPage_12.page.dark:not(.aspNetDisabled)"
   }
 
 }

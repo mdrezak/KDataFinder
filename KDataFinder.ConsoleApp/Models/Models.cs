@@ -1,6 +1,6 @@
 ﻿#region OperationResult
-using Microsoft.Extensions.Options;
-using OpenQA.Selenium;
+
+using System.Net.NetworkInformation;
 
 public interface IOperationResult : IOperationResult<object?> { }
 public interface IOperationResult<TAdditionalData>
@@ -51,8 +51,27 @@ public record LoginOptions
     public string ErrorElement { get; set; }
     public string SuccessCookie { get; set; }
 }
+#endregion
+
+
+#region TableObtainer
+public record TableObtainerOptions()
+{
+    public string[] TablePagesUrl { get; set; }
+    public bool HasHeader { get; set; }
+    public bool HasPagination { get; set; }
+    public string TableRowsContainer { get; set; }
+    /// <summary>
+    /// en-GT : When this selector does not refer to any element, it means that the pagination is over
+    /// fa-IR : زمانی که این انتخابگر به هیچ المانی ارجاع ندهد به این معنی است که صفحه بندی به پایان رسیده 
+    /// </summary>
+    public string NextPageButton { get; set; }
+}
+public record TableRow(object[] Columns,int rowNumber)
+{ }
 #nullable restore
 #endregion
+
 
 //public enum NavigationMode
 //{
