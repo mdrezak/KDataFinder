@@ -18,7 +18,7 @@
     //"Password": "",
     //"UserName": "",
     "ErrorElement": "#Login1_LabelNotice",
-    "SuccessCookie": ""
+    "SuccessCookie": "ASP.NET_SessionId"
   },
   "TableObtainerOptions": {
     "TablePagesUrl": [

@@ -2,6 +2,7 @@
 
 internal interface ILoginService
 {
+    string SuccessCookieName { get; }
     IOperationResult Login();
     IOperationResult LogOut();
 }

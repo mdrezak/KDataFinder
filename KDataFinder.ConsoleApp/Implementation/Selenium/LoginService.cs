@@ -10,6 +10,8 @@ internal class LoginService : BaseService<LoginService, LoginOptions>, ILoginSer
     : base(webDriver, logger, options)
     { }
 
+    public string SuccessCookieName => _options.SuccessCookie;
+
     public IOperationResult Login()
     {
         _logger.LogTrace($"login proccess started with this option : \n {_options}");
@@ -29,9 +31,14 @@ internal class LoginService : BaseService<LoginService, LoginOptions>, ILoginSer
         catch { }
         if (errorElement?.Displayed == true && !string.IsNullOrWhiteSpace(errorElement?.Text))
             return OperationResult.NotFound(errorElement.Text);
-        if (_options.SuccessCookie != string.Empty && string.IsNullOrWhiteSpace(_webDriver.Manage().Cookies.GetCookieNamed(_options.SuccessCookie)?.Value))
-            return OperationResult.Failure();
-        return OperationResult.Succeeded();
+        var cookieValue = "";
+        if (_options.SuccessCookie != string.Empty)
+        {
+            cookieValue = _webDriver.Manage().Cookies.GetCookieNamed(_options.SuccessCookie)?.Value;
+            if (string.IsNullOrWhiteSpace(cookieValue))
+                return OperationResult.Failure();
+        }
+        return OperationResult.Succeeded(cookieValue);
     }
 
     public IOperationResult LogOut()

@@ -47,10 +47,14 @@ internal class Program
         #region TableObtainer
         services.Configure<TableObtainerOptions>(Configuration.GetSection(nameof(TableObtainerOptions)));
         services.AddSingleton<ITableDataObtainer, TableDataObtainer>();
-        services.AddSingleton<ITableRowDetialObtainer, TableRowDetialObtainer>();
+        //services.AddSingleton<ITableRowDetialObtainer, Implementation.Selenium.TableRowDetialObtainer>();
+        services.AddSingleton<ITableRowDetialObtainer, Implementation.HtmlAgilityPack.TableRowDetialObtainer>();
         #endregion
         #region ImageToText
         services.AddTransient<IImageToTextService, ImageToTextSerivce>();
+        #endregion
+        #region DownloadService
+        services.AddSingleton<IDownloadService, DownloadService>();
         #endregion
         services.AddTransient<KApplication>();
     }
@@ -63,10 +67,22 @@ internal class Program
     }
     static void Main(string[] args)
     {
-        var application = ServiceProvider.GetRequiredService<KApplication>();
-        application.Run();
-        ServiceProvider.Dispose();
-        if (Configuration is ConfigurationRoot disposableConfiguration)
-            disposableConfiguration.Dispose();
+        try
+        {
+            var application = ServiceProvider.GetRequiredService<KApplication>();
+            application.Run();
+        }
+        catch (Exception ex)
+        {
+            var logger = ServiceProvider.GetRequiredService<ILogger<Program>>();
+            logger.LogError(ex, ex.Message);
+        }
+        finally
+        {
+
+            ServiceProvider.Dispose();
+            if (Configuration is ConfigurationRoot disposableConfiguration)
+                disposableConfiguration.Dispose();
+        }
     }
 }
