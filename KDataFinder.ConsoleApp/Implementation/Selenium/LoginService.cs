@@ -4,15 +4,11 @@ using OpenQA.Selenium;
 
 namespace KDataFinder.ConsoleApp.Implementation.Selenium;
 
-internal class LoginService : BaseService<LoginService, LoginOptions>, ILoginService, IDisposable
+internal class LoginService : BaseService<LoginService, LoginOptions>, ILoginService
 {
     public LoginService(IWebDriver webDriver, Microsoft.Extensions.Options.IOptions<LoginOptions> options, ILogger<LoginService> logger)
     : base(webDriver, logger, options)
     { }
-
-    public void Dispose()
-    {
-    }
 
     public IOperationResult Login()
     {

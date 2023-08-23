@@ -18,7 +18,7 @@ internal class TableRowDetialObtainer : BaseService<TableRowDetialObtainer, Tabl
     public async Task<List<object>> Obtain(TableRow row)
     {
         List<object> Result = new();
-        _webDriver.SwitchTo().NewWindow(WindowType.Window);
+        _webDriver.SwitchTo().NewWindow(WindowType.Tab);
         _webDriver.Navigate().GoToUrl(row.Columns[options.OriginColumnIndex].ToString()!.Split("|||")[options.OriginColumnDataIndex]);
         for (int i = 0; i < options.Objectives.Length; i++)
         {

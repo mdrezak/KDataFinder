@@ -24,10 +24,10 @@ namespace KDataFinder.ConsoleApp
             IOperationResult loginResult = _loginService.Login();
             if (!loginResult.IsSucceeded)
                 throw new InvalidDataException(loginResult.AdditionalData?.ToString());
-            var manager = new TaskManager<Task<List<object>>>(10);
+            var manager = new TaskManager<List<object>>(10,x => SaveData(x.res));
             _tableDataObtainer.Obtain(x =>
             {
-                manager.AddTask(_tableRowDetialObtainer.Obtain(x)).Wait();
+                manager.AddTask(_tableRowDetialObtainer.Obtain,x).Wait();
             });
             _webDriver.Quit();
         }

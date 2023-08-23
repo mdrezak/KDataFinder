@@ -38,7 +38,7 @@ internal class Program
     {
         #region Selenium
         services.Configure<SeleniumDriverSetup>(Configuration.GetSection(nameof(SeleniumDriverSetup)));
-        services.AddTransient(SeleniumDriverSetup.SetupDriver);
+        services.AddSingleton(SeleniumDriverSetup.SetupDriver);
         #endregion
         #region Login
         services.Configure<LoginOptions>(Configuration.GetSection(nameof(LoginOptions)));
