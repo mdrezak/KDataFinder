@@ -1,4 +1,5 @@
 ﻿using KDataFinder.ConsoleApp.Abstraction;
+using KDataFinder.ConsoleApp.Implementation;
 using KDataFinder.ConsoleApp.Implementation.Selenium;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -37,7 +38,7 @@ internal class Program
     {
         #region Selenium
         services.Configure<SeleniumDriverSetup>(Configuration.GetSection(nameof(SeleniumDriverSetup)));
-        services.AddSingleton(SeleniumDriverSetup.SetupDriver);
+        services.AddTransient(SeleniumDriverSetup.SetupDriver);
         #endregion
         #region Login
         services.Configure<LoginOptions>(Configuration.GetSection(nameof(LoginOptions)));
@@ -47,6 +48,9 @@ internal class Program
         services.Configure<TableObtainerOptions>(Configuration.GetSection(nameof(TableObtainerOptions)));
         services.AddSingleton<ITableDataObtainer, TableDataObtainer>();
         services.AddSingleton<ITableRowDetialObtainer, TableRowDetialObtainer>();
+        #endregion
+        #region ImageToText
+        services.AddTransient<IImageToTextService, ImageToTextSerivce>();
         #endregion
         services.AddTransient<KApplication>();
     }

@@ -1,5 +1,4 @@
-﻿using IronOcr;
-using KDataFinder.ConsoleApp.Abstraction;
+﻿using KDataFinder.ConsoleApp.Abstraction;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using OpenQA.Selenium;
@@ -9,15 +8,17 @@ namespace KDataFinder.ConsoleApp.Implementation.Selenium;
 internal class TableRowDetialObtainer : BaseService<TableRowDetialObtainer, TableObtainerOptions>, ITableRowDetialObtainer
 {
     private readonly DetailObtainerOptions options;
-    public TableRowDetialObtainer(IWebDriver webDriver, ILogger<TableRowDetialObtainer> logger, IOptions<TableObtainerOptions> option) : base(webDriver, logger, option)
+    private readonly IImageToTextService _imageToTextService;
+    public TableRowDetialObtainer(IWebDriver webDriver, ILogger<TableRowDetialObtainer> logger, IOptions<TableObtainerOptions> option, IImageToTextService imageToTextService) : base(webDriver, logger, option)
     {
         this.options = option.Value.DetailObtainerOptions;
+        _imageToTextService = imageToTextService;
     }
 
     public async Task<List<object>> Obtain(TableRow row)
     {
         List<object> Result = new();
-        _webDriver.SwitchTo().NewWindow(WindowType.Tab);
+        _webDriver.SwitchTo().NewWindow(WindowType.Window);
         _webDriver.Navigate().GoToUrl(row.Columns[options.OriginColumnIndex].ToString()!.Split("|||")[options.OriginColumnDataIndex]);
         for (int i = 0; i < options.Objectives.Length; i++)
         {
@@ -40,12 +41,10 @@ internal class TableRowDetialObtainer : BaseService<TableRowDetialObtainer, Tabl
                 }
                 else if (objective.ImageToText)
                 {
-                    var Ocr = new IronTesseract();
-                    Ocr.Language = OcrLanguage.Arabic;
                     var img = ((ITakesScreenshot)_webDriver.FindElement(By.CssSelector(objective.TargetElement))).GetScreenshot();
-                    img.SaveAsFile($"{Random.Shared.Next(0, 100)}.png");
-                    using (var Input = new OcrInput(img.AsByteArray))
-                        Result.Add((await Ocr.ReadAsync(Input)).Text);
+                    string fileName = $"{Random.Shared.Next(0, 100)}.png";
+                    img.SaveAsFile(fileName);
+                    Result.Add(await _imageToTextService.ImageToText(fileName));
                 }
                 else
                 {
