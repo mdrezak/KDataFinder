@@ -1,4 +1,5 @@
 ﻿using KDataFinder.ConsoleApp.Abstraction;
+using KDataFinder.ConsoleApp.Implementation;
 using OpenQA.Selenium;
 
 namespace KDataFinder.ConsoleApp
@@ -7,13 +8,15 @@ namespace KDataFinder.ConsoleApp
     {
         private readonly ILoginService _loginService;
         private readonly ITableDataObtainer _tableDataObtainer;
+        private readonly ITableRowDetialObtainer _tableRowDetialObtainer;
         private readonly IWebDriver _webDriver;
 
-        public KApplication(ILoginService loginService, ITableDataObtainer tableDataObtainer, IWebDriver webDriver)
+        public KApplication(ILoginService loginService, ITableDataObtainer tableDataObtainer, IWebDriver webDriver, ITableRowDetialObtainer tableRowDetialObtainer)
         {
             _loginService = loginService;
             _tableDataObtainer = tableDataObtainer;
             _webDriver = webDriver;
+            _tableRowDetialObtainer = tableRowDetialObtainer;
         }
 
         public void Run()
@@ -21,17 +24,16 @@ namespace KDataFinder.ConsoleApp
             IOperationResult loginResult = _loginService.Login();
             if (!loginResult.IsSucceeded)
                 throw new InvalidDataException(loginResult.AdditionalData?.ToString());
+            var manager = new TaskManager<Task<List<object>>>(10);
             _tableDataObtainer.Obtain(x =>
             {
-                //[!TODO] call detail obtainer
-                //[!TODO] obtian detial
-                //[!TODO] save in data.txt?
-                Console.Write(x.rowNumber + "-" + x.Columns.Length + "- \t");
-                foreach (var item in x.Columns)
-                    Console.Write(item.ToString() + "- \t");
+                manager.AddTask(_tableRowDetialObtainer.Obtain(x)).Wait();
             });
-
             _webDriver.Quit();
+        }
+        public void SaveData(List<object> list)
+        {
+            File.AppendAllText("data.csv", string.Join(" , ", list));
         }
     }
 }

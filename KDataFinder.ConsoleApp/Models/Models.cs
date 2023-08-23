@@ -1,6 +1,7 @@
 ﻿#region OperationResult
 
 using System.Net.NetworkInformation;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 public interface IOperationResult : IOperationResult<object?> { }
 public interface IOperationResult<TAdditionalData>
@@ -66,7 +67,24 @@ public record TableObtainerOptions()
     /// fa-IR : زمانی که این انتخابگر به هیچ المانی ارجاع ندهد به این معنی است که صفحه بندی به پایان رسیده 
     /// </summary>
     public string NextPageButton { get; set; }
+    public DetailObtainerOptions DetailObtainerOptions { get; set; }
 }
+
+public class DetailObtainerOptions
+{
+    public int OriginColumnIndex { get; set; }
+    public int OriginColumnDataIndex { get; set; } = 0;
+    public ObjectivesOfDataObtainer[] Objectives { get; set; }
+    public class ObjectivesOfDataObtainer
+    {
+        public bool IsContinuedIndexedList { get; set; }
+        public int Count { get; set; }
+        public bool ImageToText { get; set; }
+        public string TargetElement { get; set; }
+        public string TargetAttribute { get; set; }
+    }
+}
+
 public record TableRow(object[] Columns,int rowNumber)
 { }
 #nullable restore

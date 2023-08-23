@@ -2,18 +2,20 @@
 
 namespace KDataFinder.ConsoleApp.Implementation;
 
-internal class TaskManager
+internal class TaskManager<TTask> where TTask : Task
 {
     public int MaximumConcurrentTasks { get; set; }
-    public Task[] ConcurrentTasks { get; }
+    public TTask[] ConcurrentTasks { get; }
+    public Action<(TTask task, int index)> OnTaskCompleted { get; }
 
-    public TaskManager(int maximumConcurrentTasks)
+    public TaskManager(int maximumConcurrentTasks, Action<(TTask task, int index)> onTaskCompleted = null)
     {
         MaximumConcurrentTasks = maximumConcurrentTasks;
-        ConcurrentTasks = new Task[maximumConcurrentTasks];
+        ConcurrentTasks = new TTask[maximumConcurrentTasks];
+        OnTaskCompleted = onTaskCompleted;
     }
 
-    public Task AddTask(Task task)
+    public Task AddTask(TTask task)
     {
         if (ConcurrentTasks.Count(x => x == null) > 0)
         {
@@ -22,6 +24,10 @@ internal class TaskManager
         else
         {
             var completedTaskIndex = Task.WaitAny(ConcurrentTasks);
+            if (OnTaskCompleted != null) 
+                OnTaskCompleted(
+                    (ConcurrentTasks[completedTaskIndex], completedTaskIndex)
+                );
             ConcurrentTasks[completedTaskIndex] = task;
         }
         return Task.CompletedTask;

@@ -28,7 +28,82 @@
     "HasPagination": true,
     "TableRowsSelector": "table#ContentPlaceHolder2_grdProduct>tbody>tr",
     //when in last page this selector does not found any element :
-    "NextPageButton": "a#ContentPlaceHolder2_rptPager_lnkPage_12.page.dark:not(.aspNetDisabled)"
+    "NextPageButton": "a#ContentPlaceHolder2_rptPager_lnkPage_12.page.dark:not(.aspNetDisabled)",
+    "DetailObtainerOptions": {
+      "Objectives": [
+        //<Title
+        {
+          "TargetElement": "a#ContentPlaceHolder2_hflink",
+          "ImageToText": false
+        },
+        {
+          "TargetElement": "a#ContentPlaceHolder2_hflink",
+          "TargetAttribute": "href",
+          "ImageToText": false
+        },
+        //Title/>
+        //<Province-City-Category-SubCategory
+        {
+          "TargetElement": "span#ContentPlaceHolder2_rpParent_lblheaderCheild_{0}",
+          "ImageToText": false,
+          "IsContinuedIndexedList": true,
+          "Count": 4
+        },
+        {
+          "TargetElement": "a#ContentPlaceHolder2_rpParent_Url_{0}",
+          "TargetAttribute": "href",
+          "ImageToText": false,
+          "IsContinuedIndexedList": true,
+          "Count": 4
+        },
+        //Province-City-Category-SubCategory/>
+        //<Address
+        {
+          "TargetElement": "span#ContentPlaceHolder2_txtAddress",
+          "ImageToText": false
+        },
+        //Address/>
+        //<Management
+        {
+          "TargetElement": "span#ContentPlaceHolder2_LblManager",
+          "ImageToText": false
+        },
+        //Management/>
+        //<Tell
+        {
+          "TargetElement": "img#ContentPlaceHolder2_ImgTell",
+          "ImageToText": true
+        },
+        //Tell/>
+        //<Phone
+        {
+          "TargetElement": "img#ContentPlaceHolder2_ImgMobil",
+          "ImageToText": true
+        },
+        //Phone/>
+        //<Description
+        {
+          "TargetElement": "span#ContentPlaceHolder2_lblDesc",
+          "ImageToText": false
+        },
+        //Description/>
+        //<Visits
+        {
+          "TargetElement": "span#ContentPlaceHolder2_lblVisit",
+          "ImageToText": false
+        },
+        //Visits/>
+        //<default-image
+        {
+          "TargetElement": "img#ContentPlaceHolder2_ImgDefualt",
+          "TargetAttribute": "src",
+          "ImageToText": false
+        }
+        //default-image/>
+      ],
+      "OriginColumnIndex": 0,
+      "OriginColumnDataIndex": 0
+    }
   }
 
 }

@@ -3,16 +3,16 @@
 namespace KDataFinder.ConsoleApp.Implementation.Selenium.Tools;
 public static class WebElementExtensions
 {
-    public static string GetRelevantInfo(this IWebElement element, (string TagName, string TagAttr)[] relevant)
+    public static string GetRelevantInfo(this IWebElement element, (string TagName, string TagAttr)[] relevant,string seperator = "|||")
     {
         foreach (var r in relevant)
         {
             try
             {
-                var Tag = element.FindElement(By.TagName(r.TagName));
-                if (Tag != null)
+                var Tags = element.FindElements(By.TagName(r.TagName));
+                if (Tags.Count > 0)
                 {
-                    return Tag.GetAttribute(r.TagAttr);
+                    return string.Join(seperator,Tags.Select(x => x.GetAttribute(r.TagAttr)));
                 }
             }
             catch { }
