@@ -9,17 +9,21 @@ namespace KDataFinder.ConsoleApp.Implementation
 
         public ImageToTextSerivce()
         {
-            _ironTesseract = new IronTesseract();
-            _ironTesseract.Language = OcrLanguage.Arabic; //read from appsetting.json
+            _ironTesseract = new IronTesseract()
+            {
+                Language = OcrLanguage.Persian,
+            };
+            //_ironTesseract.Configuration.EngineMode = TesseractEngineMode.LstmOnly;
+            _ironTesseract.Configuration.WhiteListCharacters = "۰۱۲۳۴۵۶۷۸۹";
         }
 
-        public async Task<string> ImageToText(byte[] bytes)
+        public async Task<string> ImageToTextAsync(byte[] bytes)
         {
             using (var Input = new OcrInput(bytes))
                 return (await _ironTesseract.ReadAsync(Input)).Text;
         }
 
-        public async Task<string> ImageToText(string path)
+        public async Task<string> ImageToTextAsync(string path)
         {
             using (var Input = new OcrInput(path))
                 return (await _ironTesseract.ReadAsync(Input)).Text;

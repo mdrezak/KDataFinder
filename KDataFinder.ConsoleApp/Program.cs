@@ -79,9 +79,8 @@ internal class Program
         }
         finally
         {
-
             ServiceProvider.Dispose();
-            if (Configuration is ConfigurationRoot disposableConfiguration)
+            if (Configuration is IDisposable disposableConfiguration)
                 disposableConfiguration.Dispose();
         }
     }

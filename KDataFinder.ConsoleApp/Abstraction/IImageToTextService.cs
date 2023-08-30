@@ -3,6 +3,6 @@ namespace KDataFinder.ConsoleApp.Abstraction;
 
 internal interface IImageToTextService
 {
-    Task<string> ImageToText(byte[] bytes);
-    Task<string> ImageToText(string path);
+    Task<string> ImageToTextAsync(byte[] bytes);
+    Task<string> ImageToTextAsync(string path);
 }

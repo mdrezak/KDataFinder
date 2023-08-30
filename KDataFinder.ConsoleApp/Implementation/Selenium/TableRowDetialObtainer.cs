@@ -30,7 +30,7 @@ internal class TableRowDetialObtainer : BaseService<TableRowDetialObtainer, Tabl
                     for (int y = 0; y < objective.Count; y++)
                     {
                         if (objective.ImageToText)
-                            throw new NotImplementedException("Continued indexed list does not support for ImageToText objectives.");
+                            throw new NotImplementedException("Continued indexed list does not support for ImageToTextAsync objectives.");
                         Result.Add(
                             string.IsNullOrEmpty(objective.TargetAttribute) ?
                             _webDriver.FindElement(By.CssSelector(objective.TargetElement.Replace("{0}", y.ToString()))).Text
@@ -44,7 +44,7 @@ internal class TableRowDetialObtainer : BaseService<TableRowDetialObtainer, Tabl
                     var img = ((ITakesScreenshot)_webDriver.FindElement(By.CssSelector(objective.TargetElement))).GetScreenshot();
                     string fileName = $"{Random.Shared.Next(0, 100)}.png";
                     img.SaveAsFile(fileName);
-                    Result.Add(await _imageToTextService.ImageToText(fileName));
+                    Result.Add(await _imageToTextService.ImageToTextAsync(fileName));
                 }
                 else
                 {

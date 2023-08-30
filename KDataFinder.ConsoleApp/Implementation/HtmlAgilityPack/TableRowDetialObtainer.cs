@@ -33,7 +33,7 @@ namespace KDataFinder.ConsoleApp.Implementation.HtmlAgilityPack
                     for (int y = 0; y < objective.Count; y++)
                     {
                         if (objective.ImageToText)
-                            throw new NotImplementedException("Continued indexed list does not support for ImageToText objectives.");
+                            throw new NotImplementedException("Continued indexed list does not support for ImageToTextAsync objectives.");
                         Result.Add(
                             string.IsNullOrEmpty(objective.TargetAttribute) ?
                             document.DocumentNode.QuerySelector(objective.TargetElement.Replace("{0}", y.ToString()))?.InnerText
@@ -44,25 +44,21 @@ namespace KDataFinder.ConsoleApp.Implementation.HtmlAgilityPack
                 }
                 else if (objective.ImageToText)
                 {
-                    var img = document.DocumentNode.QuerySelector(objective.TargetElement);
-                    if (img == null) continue;
-                    var imageSource = img.GetAttributeValue("src", null);
-                    if (imageSource == null) continue;
-                    Uri uri = new Uri(currentPageUrl);
-                    var imageUri = $"{uri.Scheme}://{uri.Host}/{imageSource}";
-                    var image = await _downloadService.Download(imageUri);
-                    if (image == null) continue;
-                    string path = $"{Thread.CurrentThread.ManagedThreadId}-{i}-maybe.png";
-                    using (var fs = File.Create(path))
+
+                    try //OCR روی سیستم من کار نمیکنه به علت RAM و ....
                     {
-                        await image.CopyToAsync(fs);
-                        fs.Close();
+                        var img = document.DocumentNode.QuerySelector(objective.TargetElement);
+                        var imageSource = img?.GetAttributeValue("src", null);
+                        if (imageSource == null) goto imageCanNotProccess;
+                        Uri uri = new Uri(currentPageUrl);
+                        var imageUri = $"{uri.Scheme}://{uri.Host}/{imageSource}";
+                        var image = await _downloadService.Download(imageUri);
+                        if (image == null) goto imageCanNotProccess;
+                        string text = await _imageToTextService.ImageToTextAsync(await image.ReadAsByteArrayAsync());
+                        Result.Add(text);
                     }
-                    //[!TODO] fix OCR bug 
-                    string text = await _imageToTextService.ImageToText(path);
-                    string text2 = await _imageToTextService.ImageToText(await image.ReadAsByteArrayAsync());
-                    File.Delete(path);
-                    Result.Add(text);
+                    catch { }
+                imageCanNotProccess: Result.Add("");
                 }
                 else
                 {
