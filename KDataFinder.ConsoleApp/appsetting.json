@@ -104,6 +104,10 @@
       "OriginColumnIndex": 0,
       "OriginColumnDataIndex": 0
     }
+  },
+  "ImageToTextOptions": {
+    "DataPath": "./Resources/OCR/best",
+    "EngineMode": 3,
+    "Language": "Arabic"
   }
-
 }

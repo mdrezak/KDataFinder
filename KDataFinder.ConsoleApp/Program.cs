@@ -52,6 +52,7 @@ internal class Program
         #endregion
         #region ImageToText
         services.AddTransient<IImageToTextService, ImageToTextSerivce>();
+        services.Configure<ImageToTextOptions>(Configuration.GetSection(nameof(ImageToTextOptions)));
         #endregion
         #region DownloadService
         services.AddSingleton<IDownloadService, DownloadService>();

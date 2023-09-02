@@ -361,3 +361,9 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/KDataFinder.ConsoleApp/Resources/OCR/fas.traineddata
+/KDataFinder.ConsoleApp/Resources/OCR/eng.traineddata
+/KDataFinder.ConsoleApp/Resources/OCR/best/fas.traineddata
+/KDataFinder.ConsoleApp/Resources/OCR/best/Arabic.traineddata
+/KDataFinder.ConsoleApp/Resources/OCR/best/ara.traineddata
+/KDataFinder.ConsoleApp/Resources/OCR/ara.traineddata
