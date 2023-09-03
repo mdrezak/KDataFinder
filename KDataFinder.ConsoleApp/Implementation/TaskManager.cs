@@ -19,14 +19,14 @@ internal class TaskManager<TRes>
         OnTaskCompleted = onTaskCompleted;
     }
 
-    public Task AddTask(Func<Task<TRes>> func)
-        => AddTask(Task.Run(async () => await func()));
+    public async Task AddTask(Func<Task<TRes>> func)
+        => await AddTask(Task.Run(async () => await func()));
     
-    public Task AddTask<TArg1>(Func<TArg1,Task<TRes>> func, TArg1 arg1)
-        => AddTask(Task.Run(async () => await func(arg1)));
+    public async Task AddTask<TArg1>(Func<TArg1,Task<TRes>> func, TArg1 arg1)
+        => await AddTask(Task.Run(async () => await func(arg1)));
     
-    public Task AddTask<TArg1,TArg2>(Func<TArg1,TArg2,Task<TRes>> func, TArg1 arg1, TArg2 arg2)
-        => AddTask(Task.Run(async () => await func(arg1,arg2)));
+    public async Task AddTask<TArg1,TArg2>(Func<TArg1,TArg2,Task<TRes>> func, TArg1 arg1, TArg2 arg2)
+        => await AddTask(Task.Run(async () => await func(arg1,arg2)));
     
     private Task AddTask(Task<TRes> task)
     {

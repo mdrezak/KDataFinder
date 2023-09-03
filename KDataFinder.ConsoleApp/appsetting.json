@@ -29,6 +29,8 @@
     "TableRowsSelector": "table#ContentPlaceHolder2_grdProduct>tbody>tr",
     //when in last page this selector does not found any element :
     "NextPageButton": "a#ContentPlaceHolder2_rptPager_lnkPage_12.page.dark:not(.aspNetDisabled)",
+    "WaitWhileShow": "#ContentPlaceHolder2_imgWait",
+    "StartPage": 3,
     "DetailObtainerOptions": {
       "Objectives": [
         //<Title
@@ -108,6 +110,15 @@
   "ImageToTextOptions": {
     "DataPath": "./Resources/OCR/best",
     "EngineMode": 3,
-    "Language": "Arabic"
+    "Language": "ara"//arabik
+  },
+  "DataStoreOptions": {
+    "OutputType": 0,
+    "Grouping": [
+      4,//اول دسته
+      5,//بعد زیر دسته
+      2,//بعد استان
+      3// بعد شهر
+    ]
   }
 }

@@ -15,11 +15,13 @@ internal class TableRowDetialObtainer : BaseService<TableRowDetialObtainer, Tabl
         _imageToTextService = imageToTextService;
     }
 
+    public string GetTableDetialAddress(TableRow row) => row.Columns[options.OriginColumnIndex].ToString()!.Split("|||")[options.OriginColumnDataIndex];
+
     public async Task<List<object>> Obtain(TableRow row)
     {
         List<object> Result = new();
         _webDriver.SwitchTo().NewWindow(WindowType.Tab);
-        _webDriver.Navigate().GoToUrl(row.Columns[options.OriginColumnIndex].ToString()!.Split("|||")[options.OriginColumnDataIndex]);
+        _webDriver.Navigate().GoToUrl(GetTableDetialAddress(row));
         for (int i = 0; i < options.Objectives.Length; i++)
         {
             try

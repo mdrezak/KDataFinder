@@ -12,6 +12,13 @@ internal class LoginService : BaseService<LoginService, LoginOptions>, ILoginSer
 
     public string SuccessCookieName => _options.SuccessCookie;
 
+    public IOperationResult IsLogedin()
+    {
+        _webDriver.Navigate().GoToUrl(_options.LoginPath);
+
+        throw new NotImplementedException();
+    }
+
     public IOperationResult Login()
     {
         _logger.LogTrace($"login proccess started with this option : \n {_options}");

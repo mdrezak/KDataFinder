@@ -51,11 +51,15 @@ internal class Program
         services.AddSingleton<ITableRowDetialObtainer, Implementation.HtmlAgilityPack.TableRowDetialObtainer>();
         #endregion
         #region ImageToText
-        services.AddTransient<IImageToTextService, ImageToTextSerivce>();
+        services.AddTransient<IImageToTextService, ImageToTextSerivce1>();
         services.Configure<ImageToTextOptions>(Configuration.GetSection(nameof(ImageToTextOptions)));
         #endregion
         #region DownloadService
         services.AddSingleton<IDownloadService, DownloadService>();
+        #endregion
+        #region DataStore
+        services.Configure<DataStoreOptions>(Configuration.GetSection(nameof(DataStoreOptions)));
+        services.AddTransient<IDataStore, DataStore>();
         #endregion
         services.AddTransient<KApplication>();
     }

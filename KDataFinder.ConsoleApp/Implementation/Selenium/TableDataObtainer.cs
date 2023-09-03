@@ -21,8 +21,22 @@ namespace KDataFinder.ConsoleApp.Implementation.Selenium
             }
             return Task.CompletedTask;
         }
-        private void ObtainRows(Action<TableRow> onDataObtained)
+        private void ObtainRows(Action<TableRow> onDataObtained, bool Start = true)
         {
+            if (Start && _options.HasPagination && _options.StartPage > 1)
+                for (int i = 1; i < _options.StartPage; i++)
+                {
+                    try
+                    {
+                        _webDriver.FindElement(By.CssSelector(_options.NextPageButton)).Click();
+                        Thread.Sleep(1000);
+                        while (_webDriver.FindElement(By.CssSelector(_options.WaitWhileShow)).Displayed) ;
+                    }
+                    catch
+                    {
+                    }
+                }
+
             var currentPageRows = _webDriver.FindElements(By.CssSelector(_options.TableRowsSelector));
             for (int i = 0; i < currentPageRows.Count; i++)
             {
@@ -46,9 +60,19 @@ namespace KDataFinder.ConsoleApp.Implementation.Selenium
                 try
                 {
                     _webDriver.FindElement(By.CssSelector(_options.NextPageButton)).Click();
-                    ObtainRows(onDataObtained);
+                    Thread.Sleep(1000);
+                    try
+                    {
+                        while (_webDriver.FindElement(By.CssSelector(_options.WaitWhileShow)).Displayed)
+                            ;
+                    }
+                    catch { }
                 }
-                catch { }
+                catch
+                {
+                    return;
+                }
+                ObtainRows(onDataObtained, false);
             }
         }
     }

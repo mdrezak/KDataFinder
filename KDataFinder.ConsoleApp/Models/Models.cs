@@ -61,12 +61,14 @@ public record TableObtainerOptions()
     public string[] TablePagesUrl { get; set; }
     public bool HasHeader { get; set; }
     public bool HasPagination { get; set; }
+    public int StartPage { get; set; }
     public string TableRowsSelector { get; set; }
     /// <summary>
     /// en-GT : When this selector does not refer to any element, it means that the pagination is over
     /// fa-IR : زمانی که این انتخابگر به هیچ المانی ارجاع ندهد به این معنی است که صفحه بندی به پایان رسیده 
     /// </summary>
     public string NextPageButton { get; set; }
+    public string WaitWhileShow { get; set; }
     public DetailObtainerOptions DetailObtainerOptions { get; set; }
 }
 
@@ -85,12 +87,30 @@ public class DetailObtainerOptions
     }
 }
 
-public record TableRow(object[] Columns,int rowNumber)
+public record TableRow(object[] Columns, int rowNumber)
 { }
 #nullable restore
 #endregion
 
+#region DataStore
+#nullable disable
+public record DataStoreOptions()
+{
+    public enum OutputTypes
+    {
+        Csv,
+    }
+    public OutputTypes OutputType { get; set; }
+    /// <summary>
+    /// ایندکس بخشی از دیتا که بر اساس آن دسته بندی صورت میگیرد
+    /// </summary>
+    public int[] Grouping { get; set; }
+    //public int[] DownloadableFiles { get; set; }
+    //public int[] Files { get; set; }
+}
+#nullable restore
 
+#endregion
 //public enum NavigationMode
 //{
 //    Refresh = 0,

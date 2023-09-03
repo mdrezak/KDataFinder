@@ -17,11 +17,13 @@ namespace KDataFinder.ConsoleApp.Implementation.HtmlAgilityPack
             _downloadService = downloadService;
         }
 
+        public string GetTableDetialAddress(TableRow row) => row.Columns[options.OriginColumnIndex].ToString()!.Split("|||")[options.OriginColumnDataIndex];
+
         public async Task<List<object>> Obtain(TableRow row)
         {
             List<object?> Result = new();
             var document = new HtmlDocument();
-            string currentPageUrl = row.Columns[options.OriginColumnIndex].ToString()!.Split("|||")[options.OriginColumnDataIndex];
+            string currentPageUrl = GetTableDetialAddress(row);
             document.LoadHtml(
                await _downloadService.DownloadAsString(currentPageUrl)
             );
@@ -45,19 +47,19 @@ namespace KDataFinder.ConsoleApp.Implementation.HtmlAgilityPack
                 else if (objective.ImageToText)
                 {
 
-                    try //OCR روی سیستم من کار نمیکنه به علت RAM و ....
-                    {
-                        var img = document.DocumentNode.QuerySelector(objective.TargetElement);
-                        var imageSource = img?.GetAttributeValue("src", null);
-                        if (imageSource == null) goto imageCanNotProccess;
-                        Uri uri = new Uri(currentPageUrl);
-                        var imageUri = $"{uri.Scheme}://{uri.Host}/{imageSource}";
-                        var image = await _downloadService.Download(imageUri);
-                        if (image == null) goto imageCanNotProccess;
-                        string text = await _imageToTextService.ImageToTextAsync(await image.ReadAsByteArrayAsync());
-                        Result.Add(text);
-                    }
-                    catch { }
+                    //try //OCR روی سیستم من کار نمیکنه به علت RAM و ....
+                    //{
+                    var img = document.DocumentNode.QuerySelector(objective.TargetElement);
+                    var imageSource = img?.GetAttributeValue("src", null);
+                    if (imageSource == null) goto imageCanNotProccess;
+                    Uri uri = new Uri(currentPageUrl);
+                    var imageUri = $"{uri.Scheme}://{uri.Host}/{imageSource}";
+                    var image = await _downloadService.Download(imageUri);
+                    if (image == null) goto imageCanNotProccess;
+                    string text = await _imageToTextService.ImageToTextAsync(await image.ReadAsByteArrayAsync());
+                    Result.Add(text);
+                //}
+                //catch { }
                 imageCanNotProccess: Result.Add("");
                 }
                 else
@@ -70,7 +72,7 @@ namespace KDataFinder.ConsoleApp.Implementation.HtmlAgilityPack
                     );
                 }
             }
-            return Result.Where(x => x != null).ToList()!;
+            return Result.ToList()!;
         }
     }
 }

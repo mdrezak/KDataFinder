@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Options;
 using Tesseract;
 using IronOcr;
+using System.Drawing;
 
 namespace KDataFinder.ConsoleApp.Implementation;
 
@@ -58,7 +59,7 @@ internal class ImageToTextSerivce0 : IImageToTextService
         _options = options.Value;
         _ironTesseract = new IronTesseract()
         {
-            Language =  OcrLanguage.Persian,
+            Language = OcrLanguage.Persian,
         };
         //_ironTesseract.Configuration.EngineMode = TesseractEngineMode.LstmOnly;
         _ironTesseract.Configuration.WhiteListCharacters = "۰۱۲۳۴۵۶۷۸۹";
@@ -66,6 +67,7 @@ internal class ImageToTextSerivce0 : IImageToTextService
 
     public async Task<string> ImageToTextAsync(byte[] bytes)
     {
+        Console.WriteLine("ImageToTextAsync `Called(ImageToTextSerivce0)");
         using (var Input = new OcrInput(bytes))
             return (await _ironTesseract.ReadAsync(Input)).Text;
     }
